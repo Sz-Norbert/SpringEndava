@@ -1,4 +1,4 @@
-package org.example.springendava.ch1;
+package org.example.springendava.ch2;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
