@@ -1,5 +1,7 @@
 package org.example.springendava.controllers;
 
+import lombok.RequiredArgsConstructor;
+import org.example.springendava.OpenFeignClient;
 import org.example.springendava.models.Payment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,24 +14,19 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 @RestController
+@RequiredArgsConstructor
 public class PaymentController {
 
     private static Logger logger =Logger.getLogger(PaymentController.class.getName());
 
+    private final OpenFeignClient paymentsProxy;
+
     @PostMapping("/payment")
-    public ResponseEntity<Payment> createPayment(
-            @RequestHeader String requestId,
+    public Payment createPayment(
             @RequestBody Payment payment
     ) {
-        logger.info("Received request with ID " + requestId +
-                " ;Payment Amount: " + payment.getAmount());
-
-        payment.setId(UUID.randomUUID().toString());
-
-        return ResponseEntity
-        .status(HttpStatus.OK)
-                .header("requestId", requestId)
-                .body(payment);
+        String requestId = UUID.randomUUID().toString();
+        return paymentsProxy.createPayment(requestId, payment);
     }
 
 
