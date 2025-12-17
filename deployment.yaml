@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springendava-minikubexample
+  labels:
+    app: springendava
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springendava
+  template:
+    metadata:
+      labels:
+        app: springendava
+    spec:
+      containers:
+        - name: springendava
+          image: springendava:1.0.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
