@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shop-app-config
+  labels:
+    app: springendava
+data:
+  SPRING_PROFILES_ACTIVE: k8s
+  DB_HOST: postgres-service
+  DB_PORT: "5431"
+  DB_NAME: shop_db
+  DB_USERNAME: postgres
