@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springendava-minikubexample
+  labels:
+    app: springendava
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springendava
+  template:
+    metadata:
+      labels:
+        app: springendava
+    spec:
+      containers:
+        - name: springendava
+          image: springendava:1.0.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: springendava-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: springendava-config
+                  key: DB_PORT
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: springendava-config
+                  key: DB_NAME
+
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springendava-service
+  labels:
+    app: springendava
+spec:
+  selector:
+    app: springendava
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30080
